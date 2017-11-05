@@ -1,0 +1,66 @@
+---
+title: "Indiegogo"
+output: html_notebook
+---
+```{r}
+library(jsonlite)
+dt_tech <- read_json("/Users/jeffchiang/Git/Indiegogo-Crawler/tech.out", simplifyVector = TRUE)
+
+dt_create <- read_json("/Users/jeffchiang/Git/Indiegogo-Crawler/create.out", simplifyVector = TRUE)
+
+dt_commu <- read_json("/Users/jeffchiang/Git/Indiegogo-Crawler/commu.out", simplifyVector = TRUE)
+
+```
+
+### Data
+I scraped **all** the data available on indieagogo.
+By big genre, 5828 creative works, 3475 technology and innovation compaign, 1957 of Community Projects
+Take a glance
+```{r}
+library(DT)
+library(ggplot2)
+# datatable(dt_tech)
+# datatable(dt_create)
+# datatable(dt_commu)
+
+x <- c('tech','creative','community')
+y <- c(length(dt_tech$id),length(dt_create$id),length(dt_commu$id))
+dt1 <- data.frame(x=x,y=y)
+ggplot(data=dt1,aes(x=x,y=y,fill=x))+geom_bar(stat = 'identity')+labs(title="Compaigns Count By Genre", x="genre")
+
+
+# avg
+x <- c('tech','creative','community')
+y <- c(sum(dt_tech$balance)/length(dt_tech$id),sum(dt_create$balance)/length(dt_create$id),sum(dt_commu$balance)/length(dt_commu$id))
+dt1 <- data.frame(x=x,y=y)
+ggplot(data=dt1,aes(x=x,y=y,fill=x))+geom_bar(stat = 'identity')+labs(title="Avg Got Money By Genre", x="genre")
+
+
+```
+
+
+```{r}
+
+x <- c('tech failed', 'tech success','create failed', 'create success','commu failed', 'commu success')
+y <- c(length(subset(dt_tech,collected_percentage <1 & amt_time_left == 0 )$id), length(subset(dt_tech,collected_percentage >1 & amt_time_left == 0 )$id),length(subset(dt_create,collected_percentage <1 & amt_time_left == 0 )$id),length(subset(dt_create,collected_percentage >1 & amt_time_left == 0 )$id),length(subset(dt_commu,collected_percentage <1 & amt_time_left == 0 )$id), length(subset(dt_commu,collected_percentage >1 & amt_time_left == 0 )$id))
+
+
+dt1 <- data.frame(x=x,y=y)
+ggplot(data=dt1,aes(x=x,y=y,fill=x))+geom_bar(stat = 'identity')+labs(title="Launch Seccuss or not By Genre", x="genre")
+
+commu_success <- subset(dt_commu,collected_percentage>1 & amt_time_left == 0 )
+commu_failed <- subset(dt_commu,collected_percentage<1 & amt_time_left == 0 )
+tech_success <- subset(dt_tech,collected_percentage>1 & amt_time_left == 0 )
+tech_failed <- subset(dt_tech,collected_percentage<1 & amt_time_left == 0 )
+create_success <- subset(dt_create,collected_percentage>1 & amt_time_left == 0 )
+create_failed <- subset(dt_create,collected_percentage<1 & amt_time_left == 0 )
+
+
+
+
+
+```
+
+
+
+
