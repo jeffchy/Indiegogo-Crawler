@@ -4,7 +4,9 @@ output: html_notebook
 ---
 ```{r}
 library(jsonlite)
+library(DT)
 dt_tech <- read_json("/Users/jeffchiang/Git/Indiegogo-Crawler/tech.out", simplifyVector = TRUE)
+datatable(dt_tech)
 
 dt_create <- read_json("/Users/jeffchiang/Git/Indiegogo-Crawler/create.out", simplifyVector = TRUE)
 
@@ -36,6 +38,9 @@ dt1 <- data.frame(x=x,y=y)
 ggplot(data=dt1,aes(x=x,y=y,fill=x))+geom_bar(stat = 'identity')+labs(title="Avg Got Money By Genre", x="genre")
 
 
+
+
+
 ```
 
 
@@ -54,6 +59,29 @@ tech_success <- subset(dt_tech,collected_percentage>1 & amt_time_left == 0 )
 tech_failed <- subset(dt_tech,collected_percentage<1 & amt_time_left == 0 )
 create_success <- subset(dt_create,collected_percentage>1 & amt_time_left == 0 )
 create_failed <- subset(dt_create,collected_percentage<1 & amt_time_left == 0 )
+
+
+ggplot()+geom_histogram(aes(x=create_success$balance),bins=30)+labs(title="Create proj Launch Seccuss", x="Money Collect")
+ggplot()+geom_histogram(aes(x=create_failed$balance),bins=30)+labs(title="Create proj Launch failed", x="Money Collect")
+
+ggplot()+geom_histogram(aes(x=tech_success$balance),bins=30)+labs(title="Tech proj Launch Seccuss", x="Money Collect")
+ggplot()+geom_histogram(aes(x=tech_failed$balance),bins=30)+labs(title="Tech proj Launch failed", x="Money Collect")
+
+ggplot()+geom_histogram(aes(x=commu_success$balance),bins=30)+labs(title="Commu proj Launch Seccuss", x="Money Collect")
+ggplot()+geom_histogram(aes(x=commu_failed$balance),bins=30)+labs(title="Commu proj Launch failed", x="Money Collect")
+
+
+# 0 - 100000
+ggplot()+geom_histogram(aes(x=create_success$balance,fill=''),bins=30)+labs(title="Create proj Launch Seccuss by lim 100000", x="Money Collect")+xlim(0,100000)
+ggplot()+geom_histogram(aes(x=create_failed$balance,fill=''),bins=30)+labs(title="Create proj Launch failed by lim 100000", x="Money Collect")+xlim(0,100000)
+
+ggplot()+geom_histogram(aes(x=tech_success$balance,fill=''),bins=30)+labs(title="Tech proj Launch Seccuss by lim 100000", x="Money Collect")+xlim(0,100000)
+ggplot()+geom_histogram(aes(x=tech_failed$balance,fill=''),bins=30)+labs(title="Tech proj Launch failed by lim 100000", x="Money Collect")+xlim(0,100000)
+
+ggplot()+geom_histogram(aes(x=commu_success$balance,fill=''),bins=30)+labs(title="Commu proj Launch Seccuss by lim 100000", x="Money Collect")+xlim(0,100000)
+ggplot()+geom_histogram(aes(x=commu_failed$balance,fill=''),bins=30)+labs(title="Commu proj Launch failed by lim 100000", x="Money Collect")+xlim(0,100000)
+
+
 
 
 
